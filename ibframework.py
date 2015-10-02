@@ -14,4 +14,6 @@
 # ************************************************************************
 __author__ = 'ssgosali'
 
-class 
+class IBFramework(object):
+    pass
+
