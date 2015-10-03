@@ -2,6 +2,7 @@ __author__ = 'ssgosali'
 
 import misc.ibdata_types as datatype
 
+
 class IBEvents(object):
         def __event_handler(self, msg):
             if msg.typeName == datatype.MSG_TYPE_HISTORICAL_DATA:
