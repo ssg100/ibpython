@@ -61,6 +61,10 @@ MSG_TYPE_TICK_PRICE = "tickPrice"
 MSG_TYPE_TICK_STRING = "tickString"
 MSG_TYPE_STICK_SIZE = "tickSize"
 
+# updateAccountValue msg
+MSG_KEY_NET_LIQUIDATION = "NetLiquidation"
+MSG_KEY_BUYING_POWER    = "BuyingPower"
+
 DATE_TIME_FORMAT = "%Y%m%d %H:%M:%S"
 DATE_TIME_FORMAT_LONG = "%Y-%m-%d %H:%M:%S"
 DATE_TIME_FORMAT_LONG_MILLISECS = "%Y-%m-%d %H:%M:%S.%f"
