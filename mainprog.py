@@ -21,9 +21,11 @@ from classes.ibaccount import IBAccount
 from classes.ibevents import IBEvents
 from ibframework import IBFramework
 import time
+import sys
+from PyQt4.QtGui import *
 
 
-ACCOUNT_CODES = ['U129661', 'U146027']
+ACCOUNT_CODES = ['U129661', 'U1465027']
 
 
 def __event_handler(msg):
@@ -45,6 +47,12 @@ def __event_handler(msg):
     elif msg.typeName == datatype.MSG_TYPE_ACCOUNT_SUMMARY:
         print msg
         __on_account_summary(msg)
+    elif msg.typeName == datatype.MSG_TYPE_POSITION:
+        #print msg.typeName
+        print msg
+        print msg.contract.m_symbol
+    elif msg.typeName == datatype.MSG_TYPE_POSITION_END:
+        print "PositionEnd()"
     else:
         print msg
 
@@ -71,13 +79,20 @@ def __tick_event_handler(msg):
 def __on_account_summary(msg):
     if msg.tag == "NetLiquidation":
         print "Net Liquidation = " + msg.value
+        result = QMessageBox.question(w, 'Message', "Net liquidation exceeds", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
     print msg
 
 
+"""
+        key  value  currency  accountName
+"""
+
 def __on_account_value(msg):
     if msg.key == datatype.MSG_KEY_NET_LIQUIDATION:
         print msg
+
+    print msg.accountName
 
 
 def __on_historical_data(msg):
@@ -122,6 +137,7 @@ def __on_portfolio_update(msg):
 
 if __name__ == "__main__":
 
+
     # init framework that contains symbols, position, etc
     ib_framework = IBFramework()
 
@@ -134,13 +150,16 @@ if __name__ == "__main__":
     # Types of events:                 other events,    error handlers,   market data (ticks)
     events.register_callback_functions(__event_handler, __error_handler, __tick_event_handler)
 
-    # acc.tws_conn.reqAccountUpdates(1, ACCOUNT_CODES[0])
+    acc.tws_conn.reqPositions()
+
+    #acc.tws_conn.reqAccountUpdates(1, ACCOUNT_CODES[1])
     acc.tws_conn.reqAccountSummary(2, 'All', 'NetLiquidation,BuyingPower,TotalCashValue')
 
     sleep(3)
-    #acc.tws_conn.reqAccountUpdates(0, ACCOUNT_CODES[0])
+    #acc.tws_conn.reqAccountUpdates(0, ACCOUNT_CODES[1])
 
     # Test Historical data
+    """
     ib_framework.init_stocks_data(["SPY", "QQQ"])
     ib_framework.request_historical_data(acc.tws_conn,
                                          #time.strftime(datatype.DATE_TIME_FORMAT), # end time is now
@@ -149,5 +168,7 @@ if __name__ == "__main__":
                                          datatype.BAR_SIZE_5_MIN,
                                          datatype.WHAT_TO_SHOW_TRADES,
                                          datatype.RTH_ONLY_TRADING_HRS)
-
+    """
     print('disconnected', acc.disconnect_from_tws())
+
+
